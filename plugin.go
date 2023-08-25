@@ -144,7 +144,11 @@ func (p Plugin) Exec() error {
 		}
 
 		if p.Config.TokenValue != "" {
-			req.Header.Set("Authorization", fmt.Sprintf("%s %s", p.Config.TokenType, p.Config.TokenValue))
+			if strings.ToLower(p.Config.TokenType) == "none" {
+				req.Header.Set("Authorization", p.Config.TokenValue)
+			} else {
+				req.Header.Set("Authorization", fmt.Sprintf("%s %s", p.Config.TokenType, p.Config.TokenValue))
+			}
 		}
 
 		client := http.DefaultClient
